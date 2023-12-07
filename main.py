@@ -1,14 +1,11 @@
 from flask import Flask, render_template, jsonify, send_from_directory, redirect, url_for, session, request
-from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 import json
 import os
 from datetime import datetime
-from flask import abort
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the random string'
-#CORS(app, resources={r"/api/*": {"origins": "http://localhost:10000"}})
 bcrypt = Bcrypt(app)
 
 # File paths
@@ -51,6 +48,7 @@ if not os.path.exists(json_file_path):
 with open(json_file_path, 'r') as file:
     blog_posts = json.load(file)
 
+"""
 # API endpoint to get blog posts
 @app.route('/api/blog', methods=['GET'])
 def get_posts():
@@ -133,6 +131,31 @@ def add_links_to_posts(posts):
 
     return posts_with_links
 
+@app.route('/api/submit', methods=['POST'])
+def submit_post():
+    if 'username' not in session:
+        return jsonify({"message": "You must be logged in to submit a post"}), 401
+
+    # Load the current ID from id.txt
+    current_id = load_id() + 1
+
+    new_post = {
+        "id": current_id,
+        "title": request.form.get("title"),
+        "author": request.form.get("author"),
+        "contents": request.form.get("message"),
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Set the date to the current date and time
+    }
+
+    save_id(current_id)
+    blog_posts.append(new_post)
+
+    # Save the updated blog posts to the JSON file
+    with open('blog_posts.json', 'w') as file:
+        json.dump(blog_posts, file, indent=4)
+
+    return jsonify({"message": "Post submitted successfully"})
+"""
 
 # Route to serve the HTML file
 @app.route('/')
@@ -157,8 +180,6 @@ def login():
         return jsonify({"success": True, "message": "Login successful"})
     else:
         return jsonify({"success": False, "message": "Invalid username or password"})
-
-
 
 # API endpoint for user logout
 @app.route('/api/logout', methods=['GET'])
@@ -201,32 +222,6 @@ def register():
         return jsonify({"success": True, "message": "Registration successful"})
     else:
         return jsonify({"success": False, "message": result["message"]})
-
-
-@app.route('/api/', methods=['POST'])
-def submit_post():
-    if 'username' not in session:
-        return jsonify({"message": "You must be logged in to submit a post"}), 401
-
-    # Load the current ID from id.txt
-    current_id = load_id() + 1
-
-    new_post = {
-        "id": current_id,
-        "title": request.form.get("title"),
-        "author": request.form.get("author"),
-        "contents": request.form.get("message"),
-        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Set the date to the current date and time
-    }
-
-    save_id(current_id)
-    blog_posts.append(new_post)
-
-    # Save the updated blog posts to the JSON file
-    with open('blog_posts.json', 'w') as file:
-        json.dump(blog_posts, file, indent=4)
-
-    return jsonify({"message": "Post submitted successfully"})
 
 if __name__ == '__main__':
     app.secret_key = 'your_secret_key'

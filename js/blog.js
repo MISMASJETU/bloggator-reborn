@@ -1,5 +1,5 @@
 // blog.js
-
+/*
 function createPost(title, author, contents, date, id) {
     var postDiv = document.createElement("div");
     postDiv.classList.add("Blog");
@@ -32,7 +32,7 @@ function submitPost() {
     // Add the username of the logged-in user to the formData
     formData.append("author", getUsername());  // Using the getUsername function from auth.js
 
-    fetch('/api/', {
+    fetch('/api/submit', {
         method: 'POST',
         body: formData
     })
@@ -67,7 +67,6 @@ function updatePosts(posts) {
         createPost(post.title, post.author, post.contents, post.date, post.id);
     }
 }
-
 
 // Fetch initial posts
 fetchPosts();
@@ -181,3 +180,4 @@ function editPost() {
         alert(error.message);  // Display the error message from the server
     });
 }
+*/
