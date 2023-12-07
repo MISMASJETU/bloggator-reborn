@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 import json
 import os
 from datetime import datetime
+import hashlib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the random string'
@@ -222,6 +223,41 @@ def register():
         return jsonify({"success": True, "message": "Registration successful"})
     else:
         return jsonify({"success": False, "message": result["message"]})
+
+@app.route('/api/create_chat', methods=['POST'])
+def submit_post():
+    if 'username' not in session:
+        return jsonify({"message": "You must be logged in to create a chat"}), 401
+
+    # Load the current ID from id.txt
+    current_id = load_id() + 1
+
+    new_chat = {
+        "id": current_id,
+        "hash": chat_hash(request.form.get("title"), current_id),
+        "title": request.form.get("title"),
+        "author": request.form.get("author"),
+        "visibility": request.form.get("visibility"),
+        "users": [],
+        "contents": []
+    }
+
+    save_id(current_id)
+    blog_posts.append(new_chat)
+
+    # Save the updated blog posts to the JSON file
+    with open('blog_posts.json', 'w') as file:
+        json.dump(blog_posts, file, indent=4)
+
+    return jsonify({"message": "Chat created successfully"})
+
+
+
+def chat_hash(name, id):
+    combined_str = f"{name}{id}"
+    hashed_value = hashlib.sha256(combined_str.encode()).hexdigest()
+    return int(hashed_value, 16)
+
 
 if __name__ == '__main__':
     app.secret_key = 'your_secret_key'

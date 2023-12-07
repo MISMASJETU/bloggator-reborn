@@ -1,51 +1,29 @@
 [
     {
-        "id": 5,
-        "title": "Still loving bananas",
-        "author": "Banana",
-        "contents": "Do you like bananas?",
-        "date": "2023-11-16 08:07:24"
+        "id": 1,
+        "hash": 63424817600644217392589876727497683260227743175798728291494025787234400951476,
+        "title": "Bananas!",
+        "author": "admin",
+        "visibility": null,
+        "users": [],
+        "contents": []
     },
     {
-        "id": 6,
-        "title": "Test",
-        "author": "Tester",
-        "contents": "Testing my super-amazing admin powers!",
-        "date": "2023-11-23 07:57:57"
-    },
-    {
-        "id": 7,
-        "title": "Test",
-        "author": "I am not the author",
-        "contents": "Testing my super-amazing admin powers!",
-        "date": "2023-11-23 07:58:29"
-    },
-    {
-        "id": 8,
-        "title": "Testing",
-        "author": "",
-        "contents": "Testing my super-amazing admin powers!",
-        "date": "2023-11-23 07:59:21"
-    },
-    {
-        "id": 9,
+        "id": 2,
+        "hash": 23023576218557376339168578211095637851928453248508943282298989892312561710665,
         "title": "Test",
         "author": "admin",
-        "contents": "lOLCAT",
-        "date": "2023-11-23 08:04:40"
+        "visibility": null,
+        "users": [],
+        "contents": []
     },
     {
-        "id": 10,
-        "title": "Tester",
+        "id": 3,
+        "hash": 19690492821272335132713824812938813016622030837050120491021870620055037007609,
+        "title": "Test2",
         "author": "admin",
-        "contents": "PTEhisofagaodskgawesdag",
-        "date": "2023-11-23 09:07:23"
-    },
-    {
-        "id": 11,
-        "title": "Hello",
-        "author": "admin",
-        "contents": "raggdsreavs",
-        "date": "2023-11-23 09:07:38"
+        "visibility": "visible",
+        "users": [],
+        "contents": []
     }
 ]

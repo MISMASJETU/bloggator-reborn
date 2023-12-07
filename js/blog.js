@@ -1,4 +1,27 @@
 // blog.js
+function createChat() {
+    console.log("test")
+    var form = document.getElementById("new_room");
+    var formData = new FormData(form);
+
+    // Add the username of the logged-in user to the formData
+    formData.append("author", getUsername());  // Using the getUsername function from auth.js
+
+    fetch('/api/create_chat', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message);
+        // Clear the form after successful submission (optional)
+        form.reset();
+        // Fetch and display the updated list of posts
+    })
+    .catch(error => console.error('Error submitting blog post:', error));
+}
+
+
 /*
 function createPost(title, author, contents, date, id) {
     var postDiv = document.createElement("div");
@@ -25,27 +48,7 @@ function createPost(title, author, contents, date, id) {
     messagesDiv.appendChild(postDiv);
 }
 
-function submitPost() {
-    var form = document.getElementById("blogForm");
-    var formData = new FormData(form);
 
-    // Add the username of the logged-in user to the formData
-    formData.append("author", getUsername());  // Using the getUsername function from auth.js
-
-    fetch('/api/submit', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data.message);
-        // Clear the form after successful submission (optional)
-        form.reset();
-        // Fetch and display the updated list of posts
-        fetchPosts();
-    })
-    .catch(error => console.error('Error submitting blog post:', error));
-}
 
 function fetchPosts() {
     fetch('/api/blog')
