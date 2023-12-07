@@ -1,0 +1,172 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloggator: Future of blogging</title>
+    <style>
+        body {background-color: powderblue;}
+        h1   {color: blue;}
+        p    {color: red;}
+        .Blog {
+            border: 5px;
+            border-style: solid;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            width: 700px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+            background-color: rgb(85, 208, 224);
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+        .Blog h2 {
+            font-family: Tahoma;
+            color: rgb(63, 59, 59);
+        }
+
+        .Blog p {
+            font-family: Arial;
+            font-weight: bold;
+            color: rgb(63, 59, 59);
+        }
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: Arial;
+            font-weight: bold;
+        }
+
+        form {
+            border: 5px;
+            border-style: solid;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            width: 700px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+            background-color: rgb(189, 224, 85);
+            padding-left: 1em;
+            padding-right: 1em;
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border-radius: 5px; /* Rounded corners */
+            background-color: gray;
+            color: white;
+        }
+
+        form textarea {
+            resize: none; /* Disable textarea resizing */
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .smallForm input {
+            width: 66%;
+            padding: 8px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        .smallForm label {
+            width: 20%;
+            display: contents;
+            margin-bottom: 0px;
+            font-family: Arial;
+            font-weight: bold;
+        }
+
+        .smallForm button {
+            width: 20%;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: left;
+        }
+
+        .flex button {
+            margin-right: 1em;
+            height: 40px;
+        }
+    </style>
+    <script src="/js/auth.js" defer></script>
+    <script src="/js/blog.js" defer></script>
+</head>
+<body>
+    <h1>Bloggator</h1>
+    <div class="flex">
+        <a href="/api/logout"><button type="button">Log Out</button></a>
+        {% if username %}
+            <p>Welcome, {{ username }}!</p>
+        {% endif %}
+        <br>
+    </div>
+    <p>Amazing site which will blow your mind to 8-bits!!!</p>
+    
+
+    <form id="blogForm" action="/submit-post" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <br>
+
+        <label for="message">Post Message:</label>
+        <br>
+        <textarea id="message" name="message" rows="8" required></textarea>
+        <br>
+
+        <button type="button" onclick="submitPost()">Submit Post</button>
+    </form>
+
+    <form class="smallForm" id="searchForm" action="/search-post" method="post">
+        <label for="id">Search Id:</label>
+        <input type="number" id="id" name="id" required>
+
+        <button type="button" onclick="searchPost()">Search</button>
+    </form>
+
+    <form class="smallForm" id="deleteForm" action="/delete-post" method="post">
+        <label for="id">Delete Id:</label>
+        <input type="number" id="id" name="id" required>
+
+        <button type="button" onclick="deletePost()">Search</button>
+    </form>
+    <form id="editForm" action="/edit-post" method="post">
+        <label for="id">Edit Id:</label>
+        <input type="number" id="id" name="id" required>
+    
+        <label for="contents">New Contents:</label>
+        <textarea id="contents" name="contents" rows="8"></textarea>
+    
+        <button type="button" onclick="editPost()">Edit Post</button>
+    </form>
+    <button type="button" onclick="showPosts()">Search All</button>
+    <br>
+    <div id="messages"></div>
+
+
+</body>
+</html>

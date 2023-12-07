@@ -1,0 +1,51 @@
+[
+    {
+        "id": 5,
+        "title": "Still loving bananas",
+        "author": "Banana",
+        "contents": "Do you like bananas?",
+        "date": "2023-11-16 08:07:24"
+    },
+    {
+        "id": 6,
+        "title": "Test",
+        "author": "Tester",
+        "contents": "Testing my super-amazing admin powers!",
+        "date": "2023-11-23 07:57:57"
+    },
+    {
+        "id": 7,
+        "title": "Test",
+        "author": "I am not the author",
+        "contents": "Testing my super-amazing admin powers!",
+        "date": "2023-11-23 07:58:29"
+    },
+    {
+        "id": 8,
+        "title": "Testing",
+        "author": "",
+        "contents": "Testing my super-amazing admin powers!",
+        "date": "2023-11-23 07:59:21"
+    },
+    {
+        "id": 9,
+        "title": "Test",
+        "author": "admin",
+        "contents": "lOLCAT",
+        "date": "2023-11-23 08:04:40"
+    },
+    {
+        "id": 10,
+        "title": "Tester",
+        "author": "admin",
+        "contents": "PTEhisofagaodskgawesdag",
+        "date": "2023-11-23 09:07:23"
+    },
+    {
+        "id": 11,
+        "title": "Hello",
+        "author": "admin",
+        "contents": "raggdsreavs",
+        "date": "2023-11-23 09:07:38"
+    }
+]
