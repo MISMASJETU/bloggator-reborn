@@ -253,7 +253,10 @@ def submit_post():
 
     return jsonify({"message": "Chat created successfully"})
 
-
+# API endpoint to get rooms
+@app.route('/api/rooms', methods=['GET'])
+def get_posts():
+    return jsonify(blog_posts)
 
 def chat_hash(name, id):
     combined_str = f"{name}{id}"

@@ -78,6 +78,31 @@
             background-color: #45a049;
         }
 
+        .Blog {
+            border: 5px;
+            border-style: solid;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            width: 700px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            border-bottom-left-radius: 15px;
+            background-color: rgb(85, 208, 224);
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+        .Blog h2 {
+            font-family: Tahoma;
+            color: rgb(63, 59, 59);
+        }
+
+        .Blog p {
+            font-family: Arial;
+            font-weight: bold;
+            color: rgb(63, 59, 59);
+        }
+
     </style>
     <script src="/js/auth.js" defer></script>
     <script src="/js/blog.js" defer></script>
@@ -109,6 +134,9 @@
     <form id="current_room" action="/current-room" method="post">
     </form>
     </div>
+
+    <br>
+    <div id="rooms"></div>
 
 
 </body>
