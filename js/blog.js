@@ -27,12 +27,12 @@ function createRoomPreview(title, author, visibility, users, id) {
     var titleElement = document.createElement("h2");
     titleElement.innerText = title + " by " + author;
 
-    //var contentsElement = document.createElement("p");
-    //contentsElement.innerText = users;
+    // var contentsElement = document.createElement("p");
+    // contentsElement.innerText = users;
 
     var infoElement = document.createElement("p");
     var locked = "";
-    if(visibility == "visible"){
+    if (visibility == "visible") {
         locked = "No"
     } else {
         locked = "Yes"
@@ -40,12 +40,22 @@ function createRoomPreview(title, author, visibility, users, id) {
     infoElement.innerText = "Id: " + id + " Locked: " + locked;
 
     postDiv.appendChild(titleElement);
-    //postDiv.appendChild(contentsElement);
+    // postDiv.appendChild(contentsElement);
     postDiv.appendChild(infoElement);
+
+    var joinButton = document.createElement("button");
+    joinButton.innerText = "Join";
+    joinButton.addEventListener("click", function() {
+        // Add your logic to handle the join button click event
+        alert("Joining room with ID: " + id); // Replace this with actual joinin
+    });
+
+    postDiv.appendChild(joinButton);
 
     var messagesDiv = document.getElementById("rooms");
     messagesDiv.appendChild(postDiv);
 }
+
 
 function fetchRooms() {
     fetch('/api/rooms')
