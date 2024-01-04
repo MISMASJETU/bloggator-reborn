@@ -45,9 +45,10 @@ function createRoomPreview(title, author, visibility, users, id) {
 
     var joinButton = document.createElement("button");
     joinButton.innerText = "Join";
+    joinButton.dataset.roomId = id;  // Set the room ID as a data attribute
     joinButton.addEventListener("click", function() {
-        // Add your logic to handle the join button click event
-        alert("Joining room with ID: " + id); // Replace this with actual joinin
+        // Send a WebSocket message to join the room
+        socket.emit('join_room', {room_id: id});
     });
 
     postDiv.appendChild(joinButton);
@@ -71,11 +72,75 @@ fetchRooms();
 
 function updateRoomPreviews(rooms) {
     var messagesDiv = document.getElementById("rooms");
+
     // Clear existing room previews
     messagesDiv.innerHTML = "";
+
     // Add the updated room previews
     for (var i = 0; i < rooms.length; i++) {
         var room = rooms[i];
         createRoomPreview(room.title, room.author, room.visibility, room.users, room.id);
     }
+
+    // Add click event listeners to join buttons
+    var joinButtons = document.querySelectorAll(".Blog button");
+    joinButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            joinRoom(button.dataset.roomId);
+        });
+    });
+}
+
+var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+socket.on('connect', function() {
+    console.log('Socket connected');
+});
+
+socket.on('update_room', function(data) {
+    updateCurrentRoom(data.room_id, data.contents);
+});
+
+function joinRoom(roomId) {
+    // Update the server that the user has joined the room
+    socket.emit('join_room', {room_id: roomId});
+
+    // Fetch previous messages from the server
+    fetch('/api/rooms/' + roomId)
+        .then(response => response.json())
+        .then(data => {
+            updateCurrentRoom(roomId, data.contents);
+        })
+        .catch(error => console.error('Error fetching previous messages:', error));
+}
+
+// Function to update the current room with messages
+function updateCurrentRoom(roomId, contents) {
+    var currentRoomDiv = document.getElementById("current_room");
+
+    // Clear existing messages and form
+    currentRoomDiv.innerHTML = "";
+
+    // Add the previous messages
+    for (var i = 0; i < contents.length; i++) {
+        var messageDiv = document.createElement("div");
+        messageDiv.innerText = contents[i].author + ": " + contents[i].message;
+        currentRoomDiv.appendChild(messageDiv);
+    }
+
+    // Add input field and send button
+    var messageInput = document.createElement("input");
+    messageInput.type = "text";
+    messageInput.placeholder = "Type your message...";
+    currentRoomDiv.appendChild(messageInput);
+
+    var sendButton = document.createElement("button");
+    sendButton.innerText = "Send";
+    sendButton.addEventListener("click", function() {
+        event.preventDefault();  // Prevent the form submission
+        // Send a WebSocket message with the new message
+        socket.emit('new_message', {room_id: roomId, message: messageInput.value});
+        messageInput.value = "";  // Clear the input field
+    });
+    currentRoomDiv.appendChild(sendButton);
 }

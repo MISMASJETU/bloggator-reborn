@@ -25,5 +25,14 @@
         "visibility": "visible",
         "users": [],
         "contents": []
+    },
+    {
+        "id": 4,
+        "hash": 42380341588025564083768732078906062820549937931848545975259879364803380983589,
+        "title": "Even more bananas",
+        "author": "Banana",
+        "visibility": null,
+        "users": [],
+        "contents": []
     }
 ]

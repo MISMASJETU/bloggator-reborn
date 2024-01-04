@@ -5,10 +5,13 @@ from flask_bcrypt import Bcrypt
 import json
 import os
 import hashlib
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the random string'
 bcrypt = Bcrypt(app)
+socketio = SocketIO(app, logger=False, engineio_logger=False)
+
 
 # File paths
 json_file_path = 'blog_posts.json'
@@ -159,6 +162,21 @@ def submit_post():
     return jsonify({"message": "Post submitted successfully"})
 """
 
+
+@socketio.on('new_message')
+def handle_new_message(data):
+    room_id = data['room_id']
+    message = data['message']
+
+    # Find the room by ID
+    room = next((r for r in blog_posts if r["id"] == room_id), None)
+
+    if room:
+        room["contents"].append({"author": session['username'], "message": message})
+
+        # Broadcast the new message to all clients in the room
+        socketio.emit('update_room', {'room_id': room_id, 'contents': room["contents"]}, room=room_id)
+
 # Route to serve the HTML file
 @app.route('/')
 def index():
@@ -257,6 +275,15 @@ def submit_post():
 @app.route('/api/rooms', methods=['GET'])
 def get_posts():
     return jsonify(blog_posts)
+
+@app.route('/api/rooms/<int:room_id>', methods=['GET'])
+def get_post(room_id):
+    post = next((p for p in blog_posts if p['id'] == room_id), None)
+    if post:
+        return jsonify(post)
+    else:
+        return jsonify({"message": "Post not found"}), 404
+
 
 def chat_hash(name, id):
     combined_str = f"{name}{id}"
