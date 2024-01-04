@@ -28,3 +28,25 @@ function login() {
     })
     .catch(error => console.error('Error during login:', error));
 }
+
+function register() {
+    var form = document.getElementById("register");
+    var formData = new FormData(form);
+
+    fetch('/api/register', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message);
+        if (data.success) {
+            alert("Registration successful. You can now log in.");  // Show a success message
+            // Optionally, redirect the user to the login page
+            // window.location.href = "/login";
+        } else {
+            alert(data.message);  // Show an alert for unsuccessful registration
+        }
+    })
+    .catch(error => console.error('Error during registration:', error));
+}

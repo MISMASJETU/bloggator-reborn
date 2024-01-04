@@ -1,8 +1,9 @@
+# main.py
+
 from flask import Flask, render_template, jsonify, send_from_directory, redirect, url_for, session, request
 from flask_bcrypt import Bcrypt
 import json
 import os
-from datetime import datetime
 import hashlib
 
 app = Flask(__name__)
@@ -192,6 +193,7 @@ def logout():
 @app.route('/api/check_login', methods=['GET'])
 def check_login():
     return jsonify({'logged_in': 'username' in session})
+
 from flask_bcrypt import generate_password_hash
 
 def add_user(username, password):

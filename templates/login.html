@@ -8,6 +8,7 @@
     <style>
         body {background-color: powderblue;}
         h1   {color: blue;}
+        h2   {color: #6666ff; margin-bottom: 0;}
         p    {color: red;}
         form label {
             display: block;
@@ -58,7 +59,8 @@
     <script src="/js/auth.js" defer></script>
 </head>
 <body>
-    <h1>Bloggator - Login</h1>
+    <h1>Bloggator</h1>
+    <h2>Login</h2>
     <p>Enter your credentials to log in</p>
     <form id="login" action="/login" method="post">
         <label for="username">Username:</label>
@@ -70,6 +72,20 @@
         <br>
 
         <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <h2>Register</h2>
+    <p>Don't have an account yet? Make one!</p>
+    <form id="register" action="/api/register" method="post">
+        <label for="regUsername">Username:</label>
+        <input type="text" id="regUsername" name="username" required>
+        <br>
+
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" name="password" required>
+        <br>
+
+        <button type="button" onclick="register()">Register</button>
     </form>
 </body>
 </html>
