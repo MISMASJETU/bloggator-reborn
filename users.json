@@ -1,5 +1,8 @@
 {
     "admin": "$2b$12$nibKpwpqMP76/QvkavnvBu6uFa/CXpEppju8vpV6u6s7xATypTcuq",
     "Banana": "$2b$12$nM88wiTjQ37dKrhn42jeH.v48K0K/ooCRZKEJEjai/QZD.8mDYMRy",
-    "Test": "$2b$12$VpfxC8ypE42suJj8ELa92OKTjiAnPU2Hhc.t0DiXIKdY9KBiiXQ7G"
+    "Test": "$2b$12$VpfxC8ypE42suJj8ELa92OKTjiAnPU2Hhc.t0DiXIKdY9KBiiXQ7G",
+    "Banana2": "$2b$12$IlNkCfccrKYjP3ASCW2uSuOcJd.2r2cA3oGGFzNw53xw2R4bJiBKe",
+    "User": "$2b$12$xc1Z3M3eRjM9InuRuXVO/.qA3M5vhx//M5FS7lXBI1T1JAimI00OK",
+    "Vojta": "$2b$12$fab6TIgvLsHIwH2hGrVu6uxZ4oN7ihIAXrod9YaQgZ8F2SQZlFEHq"
 }

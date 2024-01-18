@@ -18,6 +18,7 @@ function createChat() {
         // Fetch and display the updated list of posts
     })
     .catch(error => console.error('Error submitting blog post:', error));
+    fetchRooms();
 }
 
 function createRoomPreview(title, author, visibility, users, id) {
@@ -101,6 +102,7 @@ socket.on('update_room', function(data) {
     updateCurrentRoom(data.room_id, data.contents);
 });
 
+
 function joinRoom(roomId) {
     // Update the server that the user has joined the room
     socket.emit('join_room', {room_id: roomId});
@@ -140,6 +142,7 @@ function updateCurrentRoom(roomId, contents) {
         event.preventDefault();  // Prevent the form submission
         // Send a WebSocket message with the new message
         socket.emit('new_message', {room_id: roomId, message: messageInput.value});
+        console.log("Sent out " + {room_id: roomId, message: messageInput.value});
         messageInput.value = "";  // Clear the input field
     });
     currentRoomDiv.appendChild(sendButton);
