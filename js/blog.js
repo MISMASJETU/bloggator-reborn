@@ -1,4 +1,5 @@
 // blog.js
+
 function createChat() {
     var form = document.getElementById("new_room");
     var formData = new FormData(form);
@@ -41,7 +42,6 @@ function createRoomPreview(title, author, visibility, users, id) {
     infoElement.innerText = "Id: " + id + " Locked: " + locked;
 
     postDiv.appendChild(titleElement);
-    // postDiv.appendChild(contentsElement);
     postDiv.appendChild(infoElement);
 
     var joinButton = document.createElement("button");
@@ -49,7 +49,7 @@ function createRoomPreview(title, author, visibility, users, id) {
     joinButton.dataset.roomId = id;  // Set the room ID as a data attribute
     joinButton.addEventListener("click", function() {
         // Send a WebSocket message to join the room
-        socket.emit('join_room', {room_id: id});
+        //socket.emit('join_room', {room_id: id});
     });
 
     postDiv.appendChild(joinButton);
@@ -57,7 +57,6 @@ function createRoomPreview(title, author, visibility, users, id) {
     var messagesDiv = document.getElementById("rooms");
     messagesDiv.appendChild(postDiv);
 }
-
 
 function fetchRooms() {
     fetch('/api/rooms')
@@ -92,6 +91,7 @@ function updateRoomPreviews(rooms) {
     });
 }
 
+/*
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 socket.on('connect', function() {
@@ -147,3 +147,4 @@ function updateCurrentRoom(roomId, contents) {
     });
     currentRoomDiv.appendChild(sendButton);
 }
+*/

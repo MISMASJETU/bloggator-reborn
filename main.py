@@ -5,12 +5,12 @@ from flask_bcrypt import Bcrypt
 import json
 import os
 import hashlib
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the random string'
 bcrypt = Bcrypt(app)
-socketio = SocketIO(app, logger=False, engineio_logger=False)
+#socketio = SocketIO(app, logger=False, engineio_logger=False)
 
 
 # File paths
@@ -53,6 +53,7 @@ if not os.path.exists(json_file_path):
 with open(json_file_path, 'r') as file:
     blog_posts = json.load(file)
 
+"""
 @socketio.on('new_message')
 def handle_new_message(data):
     for i in range(0,100):
@@ -68,7 +69,7 @@ def handle_new_message(data):
 
         # Broadcast the new message to all clients in the room
         socketio.emit('update_room', {'room_id': room_id, 'contents': room["contents"]}, room=room_id)
-
+"""
 # Route to serve the HTML file
 @app.route('/')
 def index():
@@ -183,6 +184,111 @@ def chat_hash(name, id):
     return int(hashed_value, 16)
 
 
-if __name__ == '__main__':
+
+
+import websockets
+import asyncio
+import time
+
+PORT = 8080
+
+# A set of connected ws clients
+connected = list()
+banned_IPs = dict()
+unban_time = 10
+client_id = 1
+
+
+# The main behavior function for this server
+async def echo(websocket, path):
+    global client_id
+    client_ip = websocket.remote_address[0]
+    print(f"new ip: {websocket.remote_address} id: {client_id}")
+    print(f"An ip just connected + {banned_IPs}")
+    if client_ip in banned_IPs.keys():
+        if not check_if_unban(client_ip=client_ip):
+            return
+        else:
+            await websocket.send("SERVER_MESSAGE: Pardoned.")
+
+    # Store a copy of the connected client
+    connected.append((client_id, websocket))
+    client_id += 1
+    # Handle incoming messages
+    try:
+        async for message in websocket:
+            print("Received message from ip: " + message)
+            # ban Rum
+            if message == "Rum":
+                await ban(websocket=websocket)
+                return
+
+            # get current sender's id to use as a name
+            current_id = 0
+            for clients in connected:
+                if clients[1] == websocket:
+                    current_id = clients[0]
+                    break
+
+            for conn in connected:
+                print(f"sending to {conn[0]}")
+                await conn[1].send(f"{message}")
+
+    # Handle disconnecting ips
+    except websockets.exceptions.ConnectionClosed as e:
+        print("A client just disconnected")
+    finally:
+        await disconnect(websocket)
+
+
+async def disconnect(websocket):
+    print("disconnected")
+    for client in connected:
+        if client[1] == websocket:
+            connected.remove(client)
+            await websocket.close()
+
+
+async def ban(websocket):
+    print("banned")
+    await websocket.send("SERVER_MESSAGE: Banned.")
+    banned_IPs[websocket.remote_address[0]] = time.time()
+    await disconnect(websocket)
+
+
+def check_if_unban(client_ip):
+    if time.time() - banned_IPs[client_ip] > unban_time:
+        banned_IPs.__delitem__(client_ip)
+        print(f"unbanned: {client_ip}")
+        return True
+
+    return False
+
+import asyncio
+import websockets
+import threading
+from werkzeug.serving import run_simple
+
+async def run_websockets_server():
+    start_server = await websockets.serve(echo, "0.0.0.0", PORT)
+    await start_server.wait_closed()
+
+def run_flask_app():
     app.secret_key = 'your_secret_key'
-    app.run(debug=True)
+    run_simple("0.0.0.0", 5000, app, use_reloader=False, use_debugger=True)
+
+if __name__ == '__main__':
+    # Create an asyncio event loop in the main thread
+    loop = asyncio.get_event_loop()
+
+    # Create two threads for running Flask app and WebSockets server
+    flask_thread = threading.Thread(target=run_flask_app)
+    websockets_thread = threading.Thread(target=lambda: loop.run_until_complete(run_websockets_server()))
+
+    # Start both threads
+    flask_thread.start()
+    websockets_thread.start()
+
+    # Wait for both threads to finish
+    flask_thread.join()
+    websockets_thread.join()

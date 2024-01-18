@@ -1,5 +1,5 @@
 //  const URL = "wss://mmsocket.onrender.com";
-const URL = "ws://127.0.0.1:5000";
+const URL = "ws://127.0.0.1:8080";
 let websocket;
 const messagesDiv = document.getElementById("messages");
 let connected = false;
@@ -16,24 +16,24 @@ function tryConnection(){
 
     websocket.onopen = function(event) {
         if(!banned){
-            alert("Připojeno");
+            alert("Connected");
         }
         connected = true;
     }
     websocket.onmessage = function(event) {
         if(`${event.data}` == 'SERVER_MESSAGE: Banned.'){
-            alert('Odpojeno');
+            alert('Disconnected');
             banned = true;
         }
         else if(`${event.data}` == 'SERVER_MESSAGE: Unbanned.'){
-            alert('Pripojeno');
+            alert('Connected');
             banned = false;
         }
         messagesDiv.innerHTML = `<p>${event.data}</p>` + messagesDiv.innerHTML;
     };
     websocket.onclose = function(event) {
         if(!banned && connected) {
-            alert("Odpojeno");
+            alert("Disconnected");
         }
         connected = false;
         setTimeout(tryConnection, 1000);
@@ -47,6 +47,13 @@ document.getElementById("send").addEventListener("click", function() {
     event.preventDefault();  // Prevent the form submission
     if(connected){
         const message = getUsername() + ": " + document.getElementById("message").value;
+        console.log(message);
         websocket.send(message);
     }
 });
+
+function getUsername() {
+    // You may need to adjust this based on how the username is stored in your session
+    // This assumes that the username is stored in the 'username' field of the session
+    return sessionStorage.getItem('username') || '';
+}
